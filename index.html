@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tap Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            margin-top: 50px;
+        }
+        #tap-button {
+            font-size: 24px;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #tap-count {
+            font-size: 48px;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Tap Game</h1>
+    <div id="game-container">
+        <button id="tap-button">Tap me!</button>
+        <div id="tap-count">0</div>
+    </div>
+    <script>
+        Telegram.WebApp.ready();
+
+        const tapButton = document.getElementById('tap-button');
+        const tapCountDisplay = document.getElementById('tap-count');
+        let tapCount = 0;
+
+        tapButton.addEventListener('click', () => {
+            tapCount++;
+            tapCountDisplay.textContent = tapCount;
+        });
+
+        // Optionally, send the tap count to the bot server
+        function sendTapCountToServer(count) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://your-server.com/tap-count');
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.send(JSON.stringify({ count: count, user: Telegram.WebApp.initDataUnsafe.user }));
+        }
+
+        tapButton.addEventListener('click', () => {
+            sendTapCountToServer(tapCount);
+        });
+    </script>
+</body>
+</html>
